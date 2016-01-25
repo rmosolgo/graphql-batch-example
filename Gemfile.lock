@@ -1,0 +1,24 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    blankslate (3.1.3)
+    graphql (0.10.7)
+      parslet (~> 1.6)
+    graphql-batch (0.1.0)
+      graphql (~> 0.8)
+    parslet (1.7.1)
+      blankslate (>= 2.0, <= 4.0)
+    sequel (4.25.0)
+    sqlite3 (1.3.11)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  graphql
+  graphql-batch
+  sequel
+  sqlite3
+
+BUNDLED WITH
+   1.10.6
