@@ -1,6 +1,6 @@
 # GraphQL::Batch Example
 
-This is a "before & after" example of [https://github.com/shopify/graphql-batch].
+This is a "before & after" example of [`graphql-batch`](https://github.com/shopify/graphql-batch).
 
 It logs SQL queries during query execution.
 
