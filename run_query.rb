@@ -1,4 +1,5 @@
 require_relative "./support/seeds"
+require 'pp'
 
 if ARGV[0] == "bad"
   require_relative "./bad_schema/schema"
@@ -34,4 +35,4 @@ query_string = %|
 
 result = MTG::Schema.execute(query_string)
 # If you want to see the result:
-# pp result
+pp result

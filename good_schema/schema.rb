@@ -1,7 +1,7 @@
 require "graphql"
 require "graphql/batch"
-require_relative "./find_query"
-require_relative "./foreign_key_query"
+require_relative "./find_loader"
+require_relative "./foreign_key_loader"
 
 ArtistType = GraphQL::ObjectType.define do
   name("Artist")
@@ -13,7 +13,7 @@ CardType = GraphQL::ObjectType.define do
   field :name, types.String
   field :expansion, -> { ExpansionType } do
     resolve -> (obj, args, ctx) {
-      FindQuery.new(MTG::Expansion, obj.expansion_id)
+      FindLoader.for(MTG::Expansion).load(obj.expansion_id)
     }
   end
 end
@@ -23,13 +23,13 @@ ExpansionType = GraphQL::ObjectType.define do
   field :name, types.String
   field :cards, -> { types[CardType] }  do
     resolve -> (obj, args, ctx) {
-      ForeignKeyQuery.new(MTG::Card, :expansion_id, obj.id)
+      ForeignKeyLoader.for(MTG::Card, :expansion_id).load([obj.id])
     }
   end
   field :artists, -> { types[ArtistType] }  do
     resolve -> (obj, args, ctx) {
-      ForeignKeyQuery.new(MTG::Card, :expansion_id, obj.id) do |cards|
-        ForeignKeyQuery.new(MTG::Artist, :id, cards.map(&:artist_id))
+      ForeignKeyLoader.for(MTG::Card, :expansion_id).load([obj.id]).then do |cards|
+        ForeignKeyLoader.for(MTG::Artist, :id).load(cards.map(&:artist_id))
       end
     }
   end
@@ -40,7 +40,7 @@ QueryType = GraphQL::ObjectType.define do
   field :card, CardType do
     argument :id, !types.Int
     resolve -> (obj, args, ctx) {
-      FindQuery.new(MTG::Card, args[:id])
+      FindLoader.for(MTG::Card).load(args[:id])
     }
   end
 end
